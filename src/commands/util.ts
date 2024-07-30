@@ -41,13 +41,12 @@ function decodeFile(contents: string, format: string): any {
   }
 }
 
-export function openFile(filename: string, suffix: string): any {
+export function openFile(filename: string, suffix: string, format?: string): any {
   let json = null
   const file = path.resolve(process.cwd(), filename)
   try {
     try {
-      const format = getFormatFromFileName(filename)
-      json = decodeFile(fs.readFileSync(file).toString(), format)
+      json = decodeFile(fs.readFileSync(file).toString(), format ?? getFormatFromFileName(filename))
     } catch (e) {
       json = require(file)
     }
@@ -77,7 +76,7 @@ export function logJSON(mode: string, data: any, ajv?: Ajv): string {
 }
 
 export function compile(ajv: Ajv, schemaFile: string): AnyValidateFunction {
-  const schema = openFile(schemaFile, "schema")
+  const schema = openFile(schemaFile, "schema", "json")
   try {
     return ajv.compile(schema)
   } catch (err) {

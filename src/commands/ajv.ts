@@ -49,7 +49,7 @@ export default function (argv: ParsedArgs): AjvCore {
     if (!args) return
     const files = util.getFiles(args)
     files.forEach((file) => {
-      const schema = util.openFile(file, fileType)
+      const schema = util.openFile(file, fileType, "json")
       try {
         ajv[method](schema)
       } catch (err) {
